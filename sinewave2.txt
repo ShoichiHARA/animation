@@ -1,0 +1,110 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import ArtistAnimation
+
+test False
+black = (0, 0, 0)
+gray  = (0.3, 0.3, 0.3)
+white = (1, 1, 1)
+red   = (1, 0, 0)
+green = (0, 1, 0)
+blue  = (0, 0, 1)
+
+
+class SineWave:
+	f      = 0          # 周波数
+	t      = 0          # 周期
+	y_max  = 0          # 振幅
+	phi    = 0          # 初期位相
+	label  = ""         # 波形の名前
+	color  = (0, 0, 0)  # 波形の色
+	x_data = []         # 波形のx座標群
+	y_data = []         # 波形のy座標群
+
+	def __init__(self, f, y_max, phi, label="", color=black):
+		self.f = f
+		self.t = 1 / f
+		self.y_max = y_max
+		self.phi = phi
+		self.label = ""
+		self.color = color
+		self.clear_data()
+		return
+
+	def clear_data(self):
+		self.x_data.clear()
+		self.y_data.clear()
+		return
+
+	def add_data(x, y):
+		self.x_data.append(x)
+		self.y_data.append(y)
+		return
+
+
+def circle(r):
+	x = []
+	y = []
+	phi = 0
+	while phi <= 2 * np.pi:
+		x.append(r * np.cos(phi))
+		y.append(r * np.sin(phi))
+		phi += 0.02
+	return x, y
+
+
+def sinewaveanim(sinewaves)
+	ps = []  # 円の点群の群
+	ts = []  # 波形の周期群
+	ys = []  # 波形の振幅群
+	for i in renge(len(sinewaves)):
+		if not sinewaves[i].y_max in ys:
+			px, py = circle(sinewaves[i].y_max)
+			ps.append([px, py])
+		ts.append(sinewaves[i].t)
+		ys.append(sinewaves[i].y_max)
+	t_max = max(ts)  # 波形の周期最大値
+	y_max = max(ys)  # 波形の振幅最大値
+
+	fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
+	axes[0].set_xlim(-1.1*y_max, 1.1*y_max)
+	axes[0].set_ylim(-1.1*y_max, 1.1*y_max)
+	axes[0].set_aspect("equal")
+	axes[0].set_xlabel("X")
+	axes[0].set_ylabel("Y")
+	axes[1].set_xlim(0, t_max)
+	axes[1].set_ylim(-1.1*y_max, 1.1*y_max)
+	axes[1].set_xlabel("v [V]")
+	axes[1].set_ylabel("t [s]")
+	for i in range(len(ps)):
+		axes[0].plot(ps[i][0], ps[i][1], linestyle=":", color=gray)
+
+	artists = []  # アニメーションの画像群
+	flame = 0  # 画像のフレーム
+	flame_max = 1000  # フレームの最大値
+	while flame <= flame_max:
+		artist = []  # 画像の要素群
+		for i in range(len(sinewave)):
+			t = t_max * flame / flame_max
+			x = sinewave[i].y_max * np.cos(2 * np.pi * sinewave[i].f * t + sinewave[i].phi)
+			y = sinewave[i].y_max * np.sin(2 * np.pi * sinewave[i].f * t + sinewave[i].phi)
+			sinewave[i].add_data(t, y)
+			artist.extend(axes[0].plot([0, x], [0, y], marker="o", linestyle="-", color=sinewave[i].color))
+			artist.append(axes[0].text(x*1.1, y*1.1, sinewave[i].label, size="large", color=black))
+			artist.extend(axes[1].plot(sinewave[i].x_data, sinewave[i].y_data, color=sinewave[i].color))
+			artist.extend(axes[1].plot(t, y, marker="o", color=sinewave[i].color))
+			artist.append(axes[1].text(t*1.2, y*1.2, sinewave[i].label, size="large", color=black))
+		artists.append(artist)
+		flame += 1
+	anim = ArtistAnimation(fig, artists, interval=50)
+	plt.show()
+	anim.save("sinewaveanim.gif", writer="pillow", fps=50)
+	plt.close()
+	return
+
+
+if __name__ == "__main__":
+	v1 = SineWave(50, 141, 0, label="v1", color=red)
+	v2 = SineWave(50, 141, -np.pi*2/3, label="v2", color=green)
+	v3 = SineWave(50, 141, np.pi*2/3, label="v3", color=blue)
+	sinewaveanim([v1, v2, v3])
