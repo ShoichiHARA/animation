@@ -4,7 +4,6 @@
 # ウインドウサイズの変更で要素も変更：https://python.keicode.com/advanced/tkinter-grid.php
 # 描画　　　　　　　　　　　　　　　：https://daeudaeu.com/tkinter_canvas_draw/
 
-
 import tkinter as tk
 
 test = False
@@ -28,7 +27,7 @@ class MainPage(tk.Frame):
         # self.key3   = tk.Button(tenkey, text="3", width=10, height=10)
         
         # ウィジェットの配置
-        self.bt0.pack(anchor="center", expand=True)
+        self.bt0.pack(anchor="center", expand=True)  # expand=True：ウインドウサイズの変更で要素の位置も変更
         self.bt1.pack(anchor="center", expand=True)
         self.bt2.pack(anchor="center", expand=True)
         self.bt3.pack(anchor="center", expand=True)
@@ -66,9 +65,15 @@ class SubWindow(tk.Toplevel):
         
         # ウィジェットの生成
         self.label = tk.Label(self, text="SubWindow", bg="blue")
+        # self.canvas = tk.Canvas(self, width=200, height=200, bg="white")
 
         # ウィジェットの配置
         self.label.pack(anchor="center", expand=True)
+        # canvas.pack(expand=True)
+
+        # キャンバスへの描画
+        # self.seg1a = self.canvas.create_polygon(100, 50, 50, 150, 150, 150, fill="", outline="black")
+        # self.seg1b = self.canvas.create_polygon(100, 75, 50, 175, 150, 175, fill="", outline="black")
 
 
 # アプリケーションクラス
